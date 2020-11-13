@@ -91,10 +91,15 @@ const useStyles = makeStyles((theme) => ({
         opacity: 0.7,
     },
     selectedDrawerItem: {
-        opacity: 1,
+        "& .MuiListItemText-root": {
+            opacity: 1,
+        },
     },
     drawerItemEstimate: {
         backgroundColor: theme.palette.common.orange,
+    },
+    appBar: {
+        zIndex: theme.zIndex.modal + 1,
     },
 }));
 
@@ -127,12 +132,41 @@ const Header = (props) => {
     const matches = useMediaQuery(theme.breakpoints.down("md"));
     const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
     const menuData = [
-        { label: "services", link: "/services" },
-        { label: "Custom Development", link: "/customsoftware" },
-        { label: "Mobile App Development", link: "/mobiledevelopment" },
-        { label: "Website Development", link: "/webdevelopment" },
+        { label: "services", link: "/services", activeIndex: 1, selctMenu: 0 },
+        {
+            label: "Custom Development",
+            link: "/customsoftware",
+            activeIndex: 1,
+            selectMenu: 1,
+        },
+        {
+            label: "Mobile App Development",
+            link: "/mobiledevelopment",
+            activeIndex: 1,
+            selectMenu: 2,
+        },
+        {
+            label: "Website Development",
+            link: "/webdevelopment",
+            activeIndex: 1,
+            selectMenu: 3,
+        },
     ];
 
+    const routes = [
+        { name: "Home", link: "/", activeIndex: 0 },
+        {
+            name: "Services",
+            link: "/services",
+            activeIndex: 1,
+            ariaOwn: anchorEl ? "simple-menu" : undefined,
+            ariaPopup: anchorEl ? "true" : undefined,
+            mouseOver: (event) => opneMenuHandler(event),
+        },
+        { name: "The Revolution", link: "/revolution", activeIndex: 2 },
+        { name: "About Us", link: "/about", activeIndex: 3 },
+        { name: "Contact Us", link: "/contact", activeIndex: 4 },
+    ];
     const opneMenuHandler = (event) => {
         setAncorEl(event.currentTarget);
         setMenuOpen(true);
@@ -150,60 +184,24 @@ const Header = (props) => {
     };
 
     useEffect(() => {
-        switch (window.location.pathname) {
-            case "/":
-                if (selectedTab !== 0) {
-                    setSelectedTab(0);
-                }
-                break;
-            case "/services":
-                if (selectedTab !== 1) {
-                    setSelectedTab(1);
-                    setSelectedMenu(0);
-                }
-                break;
-            case "/revolution":
-                if (selectedTab !== 2) {
-                    setSelectedTab(2);
-                }
-                break;
-            case "/about":
-                if (selectedTab !== 3) {
-                    setSelectedTab(3);
-                }
-                break;
-            case "/contact":
-                if (selectedTab !== 4) {
-                    setSelectedTab(4);
-                }
-                break;
-            case "/estimate":
-                if (selectedTab !== 5) {
-                    setSelectedTab(5);
-                }
-                break;
-            case "/customsoftware":
-                if (selectedTab !== 1) {
-                    setSelectedTab(1);
-                    setSelectedMenu(1);
-                }
-                break;
-            case "/mobiledevelopment":
-                if (selectedTab !== 1) {
-                    setSelectedTab(1);
-                    setSelectedMenu(2);
-                }
-                break;
-            case "/webdevelopment":
-                if (selectedTab !== 1) {
-                    setSelectedTab(1);
-                    setSelectedMenu(3);
-                }
-                break;
-            default:
-                break;
-        }
-    }, [selectedTab]);
+        [...menuData, ...routes].forEach((route) => {
+            switch (window.location.pathname) {
+                case `${route.link}`:
+                    if (selectedTab !== route.activeIndex) {
+                        setSelectedTab(route.activeIndex);
+                    }
+                    if (route.selectMenu) {
+                        console.log(selectMenu);
+                        if (route.selctMenu !== selectMenu) {
+                            setSelectedMenu(route.selectMenu);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
+    }, [selectedTab, menuData, routes, selectMenu]);
 
     const tabs = (
         <React.Fragment>
@@ -213,78 +211,58 @@ const Header = (props) => {
                 onChange={tabChangeHandler}
                 indicatorColor='primary'
             >
-                <Tab
-                    className={classes.tab}
-                    component={Link}
-                    to='/'
-                    label='Home'
-                />
-                <Tab
-                    aria-owns={anchorEl ? "simple-menu" : undefined}
-                    aria-haspopup={anchorEl ? "simple-menu" : undefined}
-                    className={classes.tab}
-                    component={Link}
-                    to='/services'
-                    label='Services'
-                    onMouseOver={(event) => opneMenuHandler(event)}
-                />
-                <Tab
-                    className={classes.tab}
-                    component={Link}
-                    to='/revolution'
-                    label='The Revolution'
-                />
-                <Tab
-                    className={classes.tab}
-                    component={Link}
-                    to='/about'
-                    label='About Us'
-                />
-                <Tab
-                    className={classes.tab}
-                    component={Link}
-                    to='/contact'
-                    label='Contact Us'
-                />
-                <Button
-                    variant='contained'
-                    color='secondary'
-                    className={classes.button}
-                >
-                    Free Estimate
-                </Button>
-                <Menu
-                    id='simple-menu'
-                    anchorEl={anchorEl}
-                    open={menuOpen}
-                    onClose={closeMenuHandler}
-                    MenuListProps={{
-                        onMouseLeave: closeMenuHandler,
-                    }}
-                    classes={{ paper: classes.menu }}
-                    elevation={0}
-                >
-                    {menuData.map((item, index) => (
-                        <MenuItem
-                            key={item.label}
-                            onClick={() => {
-                                closeMenuHandler();
-                                setSelectedTab(1);
-                            }}
-                            component={Link}
-                            to={item.link}
-                            classes={{ root: classes.menuItem }}
-                            onClick={(event) => {
-                                menuItemClickHandler(event, index);
-                                setSelectedTab(1);
-                            }}
-                            selected={index === selectMenu && selectedTab === 1}
-                        >
-                            {item.label}
-                        </MenuItem>
-                    ))}
-                </Menu>
+                {routes.map((route, index) => (
+                    <Tab
+                        key={`${index}`}
+                        aria-owns={route.ariaOwn}
+                        aria-haspopup={route.ariaPopup}
+                        className={classes.tab}
+                        component={Link}
+                        to={route.link}
+                        label={route.name}
+                        onMouseOver={route.mouseOver}
+                    />
+                ))}
             </Tabs>
+            <Button
+                variant='contained'
+                color='secondary'
+                className={classes.button}
+            >
+                Free Estimate
+            </Button>
+            <Menu
+                id='simple-menu'
+                anchorEl={anchorEl}
+                open={menuOpen}
+                onClose={closeMenuHandler}
+                MenuListProps={{
+                    onMouseLeave: closeMenuHandler,
+                }}
+                classes={{ paper: classes.menu }}
+                elevation={0}
+                style={{ zIndex: 1302 }}
+            >
+                {menuData.map((item, index) => (
+                    <MenuItem
+                        key={item.label}
+                        onClick={() => {
+                            closeMenuHandler();
+                            setSelectedTab(1);
+                        }}
+                        component={Link}
+                        to={item.link}
+                        classes={{ root: classes.menuItem }}
+                        onClick={(event) => {
+                            menuItemClickHandler(event, index);
+                            setSelectedTab(1);
+                        }}
+                        selected={index === selectMenu && selectedTab === 1}
+                    >
+                        {item.label}
+                    </MenuItem>
+                ))}
+            </Menu>
         </React.Fragment>
     );
 
@@ -298,145 +276,31 @@ const Header = (props) => {
                 onOpen={() => setDrawerOpen(true)}
                 classes={{ paper: classes.drawer }}
             >
-                <List disablePadding>
-                    <ListItem
-                        divider
-                        button
-                        onClick={() => {
-                            setDrawerOpen(false);
-                            setSelectedTab(0);
-                        }}
-                        component={Link}
-                        to='/'
-                        selected={selectedTab === 0}
-                    >
-                        <ListItemText
-                            className={
-                                selectedTab === 0
-                                    ? [
-                                          classes.draweItem,
-                                          classes.selectedDrawerItem,
-                                      ]
-                                    : classes.draweItem
-                            }
-                            disableTypography
+                <div className={classes.toolbarMargin} />
+                {routes.map((route, index) => (
+                    <List disablePadding key={`${index}`}>
+                        <ListItem
+                            divider
+                            button
+                            onClick={() => {
+                                setDrawerOpen(false);
+                                setSelectedTab(route.activeIndex);
+                            }}
+                            component={Link}
+                            to={route.link}
+                            selected={selectedTab === route.activeIndex}
+                            classes={{ selected: classes.selectedDrawerItem }}
                         >
-                            Home
-                        </ListItemText>
-                    </ListItem>
-                </List>
+                            <ListItemText
+                                className={classes.draweItem}
+                                disableTypography
+                            >
+                                {route.name}
+                            </ListItemText>
+                        </ListItem>
+                    </List>
+                ))}
 
-                <List disablePadding>
-                    <ListItem
-                        divider
-                        button
-                        onClick={() => {
-                            setDrawerOpen(false);
-                            setSelectedTab(1);
-                        }}
-                        component={Link}
-                        to='/services'
-                        selected={selectedTab === 1}
-                    >
-                        <ListItemText
-                            className={
-                                selectedTab === 1
-                                    ? [
-                                          classes.draweItem,
-                                          classes.selectedDrawerItem,
-                                      ]
-                                    : classes.draweItem
-                            }
-                            disableTypography
-                        >
-                            Services
-                        </ListItemText>
-                    </ListItem>
-                </List>
-
-                <List disablePadding>
-                    <ListItem
-                        divider
-                        button
-                        onClick={() => {
-                            setDrawerOpen(false);
-                            setSelectedTab(2);
-                        }}
-                        component={Link}
-                        to='/revolution'
-                        selected={selectedTab === 2}
-                    >
-                        <ListItemText
-                            className={
-                                selectedTab === 2
-                                    ? [
-                                          classes.draweItem,
-                                          classes.selectedDrawerItem,
-                                      ]
-                                    : classes.draweItem
-                            }
-                            disableTypography
-                        >
-                            Revolution
-                        </ListItemText>
-                    </ListItem>
-                </List>
-
-                <List disablePadding>
-                    <ListItem
-                        divider
-                        button
-                        onClick={() => {
-                            setDrawerOpen(false);
-                            setSelectedTab(3);
-                        }}
-                        component={Link}
-                        to='/about'
-                        selected={selectedTab === 3}
-                    >
-                        <ListItemText
-                            className={
-                                selectedTab === 3
-                                    ? [
-                                          classes.draweItem,
-                                          classes.selectedDrawerItem,
-                                      ]
-                                    : classes.draweItem
-                            }
-                            disableTypography
-                        >
-                            About Us
-                        </ListItemText>
-                    </ListItem>
-                </List>
-
-                <List disablePadding>
-                    <ListItem
-                        divider
-                        button
-                        onClick={() => {
-                            setDrawerOpen(false);
-                            setSelectedTab(4);
-                        }}
-                        component={Link}
-                        to='/contact'
-                        selected={selectedTab === 4}
-                    >
-                        <ListItemText
-                            className={
-                                selectedTab === 4
-                                    ? [
-                                          classes.draweItem,
-                                          classes.selectedDrawerItem,
-                                      ]
-                                    : classes.draweItem
-                            }
-                            disableTypography
-                        >
-                            Contact Us
-                        </ListItemText>
-                    </ListItem>
-                </List>
                 <List disablePadding>
                     <ListItem
                         divider
@@ -447,18 +311,14 @@ const Header = (props) => {
                         }}
                         component={Link}
                         to='/estimate'
-                        className={classes.drawerItemEstimate}
+                        classes={{
+                            root: classes.drawerItemEstimate,
+                            selected: classes.selectedDrawerItem,
+                        }}
                         selected={selectedTab === 5}
                     >
                         <ListItemText
-                            className={
-                                selectedTab === 5
-                                    ? [
-                                          classes.draweItem,
-                                          classes.selectedDrawerItem,
-                                      ]
-                                    : classes.draweItem
-                            }
+                            className={classes.draweItem}
                             disableTypography
                         >
                             Free Estimate
@@ -478,7 +338,7 @@ const Header = (props) => {
     return (
         <React.Fragment>
             <ElevationScroll>
-                <AppBar color='primary'>
+                <AppBar color='primary' className={classes.appBar}>
                     <Toolbar disableGutters>
                         <Button
                             component={Link}
