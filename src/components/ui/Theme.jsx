@@ -1,3 +1,4 @@
+import { blue } from "@material-ui/core/colors";
 import { createMuiTheme } from "@material-ui/core/styles";
 
 const Blue = "#0B72B9";
@@ -26,6 +27,13 @@ const theme = createMuiTheme({
             fontFamily: "Pacifico",
             textTransform: "none",
             color: "white",
+        },
+        h2: {
+            fontFamily: "Raleway",
+            fontWeight: 700,
+            fontSize: "2.5rem",
+            color: Blue,
+            lineHeight: 1.5,
         },
     },
 });

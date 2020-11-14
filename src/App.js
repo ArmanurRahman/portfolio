@@ -4,6 +4,7 @@ import { ThemeProvider } from "@material-ui/styles";
 import theme from "./components/ui/Theme";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Footer from "./components/ui/Footer";
+import LandingPage from "./components/ui/LandingPage";
 
 function App() {
     const [selectedTab, setSelectedTab] = useState(0);
@@ -18,7 +19,7 @@ function App() {
                     setSelectedMenu={setSelectedMenu}
                 />
                 <Switch>
-                    <Route exact path='/' component={() => <div>Home</div>} />
+                    <Route exact path='/' component={LandingPage} />
                     <Route
                         exact
                         path='/services'
