@@ -29,13 +29,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     learButtonHero: {
-        borderColor: theme.palette.common.blue,
-        color: theme.palette.common.blue,
-        borderWidth: 2,
-        textTransform: "none",
-        borderRadius: 50,
-        fontFamily: "Roboto",
-        fontWeight: "bold",
+        ...theme.typography.learnButton,
         fontSize: "0.9rem",
         width: 145,
         height: 45,
@@ -67,53 +61,44 @@ const HeroBlock = (props) => {
     };
 
     return (
-        <Grid container direction='column' className={classes.mainConteiner}>
-            <Grid item>
-                <Grid
-                    container
-                    direction='row'
-                    justify='flex-end'
-                    alignItems='center'
-                >
-                    <Grid sm item className={classes.heroTextContainer}>
-                        <Typography align='center' variant='h2'>
-                            Bring west cost tecnology <br /> to the Midwest
-                        </Typography>
-                        <Grid container justify='center'>
-                            <Grid item>
-                                <Button
-                                    variant='contained'
-                                    className={classes.estimateButton}
-                                >
-                                    {" "}
-                                    Free Estimate
-                                </Button>
-                            </Grid>
-                            <Grid item>
-                                <Button
-                                    variant='outlined'
-                                    className={classes.learButtonHero}
-                                >
-                                    {" "}
-                                    Learn More
-                                    <span style={{ marginRight: 10 }}></span>
-                                    <ButtonArrow
-                                        width={15}
-                                        height={15}
-                                        fill={theme.palette.common.blue}
-                                    />
-                                </Button>
-                            </Grid>
-                        </Grid>
+        <Grid container direction='row' justify='flex-end' alignItems='center'>
+            <Grid sm item className={classes.heroTextContainer}>
+                <Typography align='center' variant='h2'>
+                    Bring west cost tecnology <br /> to the Midwest
+                </Typography>
+                <Grid container justify='center'>
+                    <Grid item>
+                        <Button
+                            variant='contained'
+                            className={classes.estimateButton}
+                        >
+                            {" "}
+                            Free Estimate
+                        </Button>
                     </Grid>
-                    <Grid sm item className={classes.animation}>
-                        <Lottie
-                            options={defaultOptions}
-                            height={"100%"}
-                            width={"100%"}
-                        />
+                    <Grid item>
+                        <Button
+                            variant='outlined'
+                            className={classes.learButtonHero}
+                        >
+                            {" "}
+                            Learn More
+                            <span style={{ marginRight: 10 }}></span>
+                            <ButtonArrow
+                                width={15}
+                                height={15}
+                                fill={theme.palette.common.blue}
+                            />
+                        </Button>
                     </Grid>
                 </Grid>
+            </Grid>
+            <Grid sm item className={classes.animation}>
+                <Lottie
+                    options={defaultOptions}
+                    height={"100%"}
+                    width={"100%"}
+                />
             </Grid>
         </Grid>
     );
