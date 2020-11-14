@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "./components/ui/Header";
 import { ThemeProvider } from "@material-ui/styles";
 import theme from "./components/ui/Theme";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import Footer from "./components/ui/Footer";
 
 function App() {
+    const [selectedTab, setSelectedTab] = useState(0);
+    const [selectMenu, setSelectedMenu] = useState(0);
     return (
         <ThemeProvider theme={theme}>
             <BrowserRouter>
-                <Header />
+                <Header
+                    selectedTab={selectedTab}
+                    setSelectedTab={setSelectedTab}
+                    selectMenu={selectMenu}
+                    setSelectedMenu={setSelectedMenu}
+                />
                 <Switch>
                     <Route exact path='/' component={() => <div>Home</div>} />
                     <Route
@@ -52,6 +60,10 @@ function App() {
                         component={() => <div>estimate</div>}
                     />
                 </Switch>
+                <Footer
+                    setSelectedTab={setSelectedTab}
+                    setSelectedMenu={setSelectedMenu}
+                />
             </BrowserRouter>
         </ThemeProvider>
     );

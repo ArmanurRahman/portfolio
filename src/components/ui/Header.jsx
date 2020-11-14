@@ -117,15 +117,12 @@ function ElevationScroll(props) {
 }
 
 const Header = (props) => {
-    const [selectedTab, setSelectedTab] = useState(0);
-
     const tabChangeHandler = (event, index) => {
-        setSelectedTab(index);
+        props.setSelectedTab(index);
     };
     const [anchorEl, setAncorEl] = useState(null);
     const [menuOpen, setMenuOpen] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const [selectMenu, setSelectedMenu] = useState(0);
 
     const classes = useStyles();
     const theme = useTheme();
@@ -180,20 +177,19 @@ const Header = (props) => {
     const menuItemClickHandler = (event, index) => {
         setAncorEl(null);
         setMenuOpen(false);
-        setSelectedMenu(index);
+        props.setSelectedMenu(index);
     };
 
     useEffect(() => {
         [...menuData, ...routes].forEach((route) => {
             switch (window.location.pathname) {
                 case `${route.link}`:
-                    if (selectedTab !== route.activeIndex) {
-                        setSelectedTab(route.activeIndex);
+                    if (props.selectedTab !== route.activeIndex) {
+                        props.setSelectedTab(route.activeIndex);
                     }
                     if (route.selectMenu) {
-                        console.log(selectMenu);
-                        if (route.selctMenu !== selectMenu) {
-                            setSelectedMenu(route.selectMenu);
+                        if (route.selctMenu !== props.selectMenu) {
+                            props.setSelectedMenu(route.selectMenu);
                         }
                     }
                     break;
@@ -201,12 +197,12 @@ const Header = (props) => {
                     break;
             }
         });
-    }, [selectedTab, menuData, routes, selectMenu]);
+    }, [props.selectedTab, menuData, routes, props.selectMenu]);
 
     const tabs = (
         <React.Fragment>
             <Tabs
-                value={selectedTab}
+                value={props.selectedTab}
                 className={classes.tabContainer}
                 onChange={tabChangeHandler}
                 indicatorColor='primary'
@@ -248,16 +244,19 @@ const Header = (props) => {
                         key={item.label}
                         onClick={() => {
                             closeMenuHandler();
-                            setSelectedTab(1);
+                            props.setSelectedTab(1);
                         }}
                         component={Link}
                         to={item.link}
                         classes={{ root: classes.menuItem }}
                         onClick={(event) => {
                             menuItemClickHandler(event, index);
-                            setSelectedTab(1);
+                            props.setSelectedTab(1);
                         }}
-                        selected={index === selectMenu && selectedTab === 1}
+                        selected={
+                            index === props.selectMenu &&
+                            props.selectedTab === 1
+                        }
                     >
                         {item.label}
                     </MenuItem>
@@ -284,11 +283,11 @@ const Header = (props) => {
                             button
                             onClick={() => {
                                 setDrawerOpen(false);
-                                setSelectedTab(route.activeIndex);
+                                props.setSelectedTab(route.activeIndex);
                             }}
                             component={Link}
                             to={route.link}
-                            selected={selectedTab === route.activeIndex}
+                            selected={props.selectedTab === route.activeIndex}
                             classes={{ selected: classes.selectedDrawerItem }}
                         >
                             <ListItemText
@@ -307,7 +306,7 @@ const Header = (props) => {
                         button
                         onClick={() => {
                             setDrawerOpen(false);
-                            setSelectedTab(5);
+                            props.setSelectedTab(5);
                         }}
                         component={Link}
                         to='/estimate'
@@ -315,7 +314,7 @@ const Header = (props) => {
                             root: classes.drawerItemEstimate,
                             selected: classes.selectedDrawerItem,
                         }}
-                        selected={selectedTab === 5}
+                        selected={props.selectedTab === 5}
                     >
                         <ListItemText
                             className={classes.draweItem}
@@ -344,7 +343,7 @@ const Header = (props) => {
                             component={Link}
                             to='/'
                             className={classes.logoContainer}
-                            onClick={() => setSelectedTab(0)}
+                            onClick={() => props.setSelectedTab(0)}
                             disableRipple
                         >
                             <img
