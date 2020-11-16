@@ -4,6 +4,8 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import HeroBlock from "./HeroBlock";
 import ServiceChildComponent from "./ServiceChildComponent";
+import RelolutionLand from "./RevolutionLand";
+import InformationBlock from "./InformationBlock";
 
 const useStyles = makeStyles((theme) => ({
     mainConteiner: {
@@ -32,6 +34,12 @@ const LandingPage = (props) => {
                 </Grid>
                 <Grid item>
                     <ServiceChildComponent />
+                </Grid>
+                <Grid item>
+                    <RelolutionLand />
+                </Grid>
+                <Grid item>
+                    <InformationBlock />
                 </Grid>
             </Grid>
         </React.Fragment>

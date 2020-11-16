@@ -52,6 +52,11 @@ const theme = createMuiTheme({
             fontSize: "1.25rem",
             color: Gray,
         },
+        subtitle2: {
+            fontWeight: 400,
+            fontSize: "1.25rem",
+            color: "white",
+        },
         learnButton: {
             borderColor: Blue,
             color: Blue,
