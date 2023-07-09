@@ -1,3 +1,21 @@
-body {
+* {
+    margin: 0;
+    padding: 0;
+}
 
+body {
+    font-family: 'Roboto Mono', monospace;
+    
+}
+
+html {
+    box-sizing: border-box;
+}
+
+:root {
+    --color-black: #1F2833;
+    --color-grey : #C5C6C7;
+    --color-skyblue: #66FCF1;
+    --color-blue: #5918df;;
+    --color-green: #45A29E;
 }

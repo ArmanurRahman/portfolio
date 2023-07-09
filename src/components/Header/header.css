@@ -1,0 +1,26 @@
+.header_section {
+    display: flex;
+    color: var(--color-skyblue);
+    justify-content: space-between;
+    align-items: center;
+    padding: .5rem 1rem;
+}
+
+.header_section span {
+    color: var(--color-blue);
+}
+.header_section ul {
+    display: flex;
+    gap: 1rem;
+    list-style: none;
+}
+
+.header_section ul li {
+    cursor: pointer;
+}
+
+.logo {
+    font-size: 1.4rem;
+    font-weight: 600;
+    cursor: pointer;
+}
