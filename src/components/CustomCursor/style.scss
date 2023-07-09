@@ -1,0 +1,9 @@
+.custom-cursor {
+    height: 30px;
+    width: 30px;
+    border: 2px solid var(--color-blue);
+    border-radius: 100%;
+    position: fixed;
+    z-index: 1000;
+    transform: translate(0px, 0px);
+}
